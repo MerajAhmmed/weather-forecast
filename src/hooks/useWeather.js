@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 const useWeather = () => {
-  const [weatherData, setweatherData] = useState({
+  const [weatherData, setWeatherData] = useState({
     location: "",
     climate: "",
-    temparature: "",
-    maxTemparaure: "",
-    minTemparature: "",
+    temperature: "",
+    maxTemperature: "",
+    minTemperature: "",
     humidity: "",
     cloudPercentage: "",
     wind: "",
@@ -14,7 +14,6 @@ const useWeather = () => {
     longitude: "",
     latitude: "",
   });
-
   const [loading, setLoading] = useState({
     state: false,
     message: "",
@@ -27,25 +26,29 @@ const useWeather = () => {
       setLoading({
         ...loading,
         state: true,
-        message: "Fetaching Weather Data...",
+        message: "Fetching weather data...",
       });
+
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${
+        `https://api.openweathermap.org/data/2.5/weather?lsat=${latitude}&lon=${longitude}&appid=${
           import.meta.env.VITE_WEATHER_API_KEY
-        }&unites=metric`
+        }&units=metric`
       );
+
       if (!response.ok) {
-        const errorMessage = `Fetching Weather data failed: ${response.status}`;
+        const errorMessage = `Fetching weather data failed: ${response.status}`;
         throw new Error(errorMessage);
       }
+
       const data = await response.json();
-      const updatedData = {
+
+      const updateWeatherData = {
         ...weatherData,
         location: data?.name,
         climate: data?.weather[0]?.main,
-        temparature: data?.main?.temp,
-        maxTemparaure: data?.main?.temp_max,
-        minTemparature: data?.main?.temp_min,
+        temperature: data?.main?.temp,
+        maxTemperature: data?.main?.temp_max,
+        minTemperature: data?.main?.temp_min,
         humidity: data?.main?.humidity,
         cloudPercentage: data?.clouds?.all,
         wind: data?.wind?.speed,
@@ -53,7 +56,7 @@ const useWeather = () => {
         longitude: longitude,
         latitude: latitude,
       };
-      setweatherData(updatedData);
+      setWeatherData(updateWeatherData);
     } catch (err) {
       setError(err);
     } finally {
@@ -71,11 +74,12 @@ const useWeather = () => {
       message: "Finding location...",
     });
     navigator.geolocation.getCurrentPosition(function (position) {
-      fetchWeatherData(position.coords.latitude, position.coords.longitude);
+      fetchWeatherData(position.coords.longitude, position.coords.longitude);
     });
 
     fetchWeatherData();
   }, []);
+
   return {
     weatherData,
     error,

@@ -5,7 +5,7 @@ import WeatherHeadline from "./WeatherHeadline";
 
 export default function WeatherBord() {
   const { loading, error, weatherData } = useWeather();
-  console.log(loading, error, weatherData)
+  // console.log(loading, error, weatherData)
 
   return (
     <div className="container">
